@@ -206,16 +206,15 @@ margin-top:40px;
 <div class="container">
 
 <h1 style="text-align:center">Diseños Premium</h1>
-<p style="text-align:center;">Compra segura. Descarga inmediata tras el pago.</p>
+<p style="text-align:center;">Descarga inmediata en diseños gratis o compra segura.</p>
 
 <div id="productos" class="grid grid-3"></div>
 
 <div class="section notice">
 <strong>¿Cómo funciona?</strong>
 <ol>
-<li>Elige tu diseño.</li>
-<li>Paga con Stripe Checkout.</li>
-<li>Vuelves a esta web y descargas tus archivos.</li>
+<li>Si el diseño es gratis → descarga automática.</li>
+<li>Si tiene precio → te redirecciona a la página de compra.</li>
 </ol>
 </div>
 
@@ -227,8 +226,6 @@ margin-top:40px;
 <div class="container">© 2026 Melamina Fácil</div>
 </footer>
 
-<script src="https://js.stripe.com/v3/"></script>
-
 <script>
 
 /* PROTECCIÓN */
@@ -236,28 +233,8 @@ if (!localStorage.getItem("acceso")) {
 window.location.href = "index.html";
 }
 
-/* STRIPE CHECKOUT */
-async function checkout(productKey){
-try{
-const res = await fetch("/.netlify/functions/create-checkout",{
-method:"POST",
-headers:{ "Content-Type":"application/json" },
-body: JSON.stringify({ product: productKey })
-});
-const data = await res.json();
-if(data.url){
-window.location = data.url;
-}else{
-alert("No se pudo iniciar el pago.");
-}
-}catch(e){
-console.error(e);
-alert("Error al conectar con el pago.");
-}
-}
-
-/* CARGAR PRODUCTOS */
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTYQbqTBrB9zkx6CQeEGf1O0HoYW3Irn4pXCdLIEMONnfr9ioPaAsnbjYHcVJaxEC7T0qfBNMDqDAYu/pub?gid=0&single=true&output=csv";
+/* NUEVO GOOGLE SHEET */
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR78U7i11n8Q5uIFPVLO2FMCQWFeymHgrCGPBwMdmqvmut_Ic906Nkhr_caQTnHbCC56BKfTvz00NJp/pub?output=csv";
 
 async function cargarProductos(){
 const res = await fetch(CSV_URL);
@@ -268,7 +245,22 @@ const contenedor = document.getElementById("productos");
 filas.forEach(fila=>{
 if(!fila.trim()) return;
 
-const [nombre, descripcion, precio, link, imagen] = fila.split(",");
+const columnas = fila.split(",");
+
+const nombre = columnas[0];
+const descripcion = columnas[1];
+const precio = columnas[2];
+const linkDescarga = columnas[3];
+const imagen = columnas[4];
+const linkCompra = columnas[5];
+
+const esGratis = precio.trim().toLowerCase() === "0" || precio.trim().toLowerCase() === "gratis";
+
+const accionBoton = esGratis
+? `descargarArchivo('${linkDescarga}')`
+: `window.location.href='${linkCompra}'`;
+
+const textoPrecio = esGratis ? "Gratis" : `USD ${precio}`;
 
 const card = document.createElement("div");
 card.className = "card product";
@@ -276,14 +268,24 @@ card.innerHTML = `
 <img src="${imagen}" alt="${nombre}">
 <h3>${nombre}</h3>
 <p>${descripcion}</p>
-<div class="price">USD ${precio}</div>
-<button class="btn" onclick="checkout('${link}')">
+<div class="price">${textoPrecio}</div>
+<button class="btn" onclick="${accionBoton}">
 Comprar y descargar
 </button>
 `;
 contenedor.appendChild(card);
 });
 }
+
+function descargarArchivo(url){
+const enlace = document.createElement("a");
+enlace.href = url;
+enlace.download = "";
+document.body.appendChild(enlace);
+enlace.click();
+document.body.removeChild(enlace);
+}
+
 cargarProductos();
 
 /* MENU MOVIL */
