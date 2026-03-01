@@ -7,7 +7,8 @@
 
 <style>
 
-/* GENERAL */
+/* ===== TODO EL MISMO CSS DE CORTES ===== */
+
 body{
 margin:0;
 padding-top:60px;
@@ -27,7 +28,7 @@ padding:40px 0;
 
 .card{
 background:#fff;
-padding:25px;
+padding:20px;
 margin-bottom:25px;
 border-radius:10px;
 box-shadow:0 4px 10px rgba(0,0,0,.05);
@@ -112,7 +113,17 @@ font-weight:bold;
 .menu-toggle{ display:block; }
 }
 
-/* FORMULARIO */
+/* FOOTER */
+footer{
+background:#111;
+color:#fff;
+padding:20px 0;
+text-align:center;
+margin-top:40px;
+}
+
+/* ===== SOLO AGREGAMOS ESTO PARA EL FORMULARIO ===== */
+
 form input,
 form textarea{
 width:100%;
@@ -128,7 +139,6 @@ form textarea{
 resize:none;
 }
 
-/* BOTON */
 .btn{
 background:#111;
 color:#fff;
@@ -145,15 +155,6 @@ transition:.3s;
 opacity:.85;
 }
 
-/* FOOTER */
-footer{
-background:#111;
-color:#fff;
-padding:20px 0;
-text-align:center;
-margin-top:40px;
-}
-
 </style>
 </head>
 
@@ -164,6 +165,7 @@ margin-top:40px;
 <nav style="display:flex;justify-content:space-between;align-items:center;">
 
 <div class="logo-container">
+<img src="https://res.cloudinary.com/dy0bpqylb/image/upload/v1772170669/Whisk_64ff7a55c55a248a9dd4c314604cba6cdr_disia0.png">
 <strong style="font-size:18px;">Melamina Fácil</strong>
 </div>
 
@@ -188,16 +190,20 @@ margin-top:40px;
 <a href="contacto.html" class="activo">📱 Contacto</a>
 <a href="#">❌ Cerrar Sesión</a>
 </div>
+
 </header>
 
 <main>
 <section class="section">
-<div class="container" style="max-width:520px">
+<div class="container" style="max-width:600px;">
 
-<div class="card">
+<h1 style="text-align:center">Contacto</h1>
 
-<h1 style="text-align:center;">Contacto</h1>
-<p style="text-align:center;">Escríbenos y te respondemos por WhatsApp.</p>
+<section class="card">
+
+<p style="text-align:center;">
+Escríbenos y te respondemos por WhatsApp.
+</p>
 
 <form onsubmit="enviarWhatsApp(event,this)">
 
@@ -225,8 +231,7 @@ margin-top:40px;
 
 </form>
 
-</div>
-
+</section>
 </div>
 </section>
 </main>
@@ -256,7 +261,13 @@ menu.style.display="none";
 }
 });
 
-/* WHATSAPP + RESET */
+window.addEventListener("touchmove",function(){
+if(menu.style.display==="flex"){
+menu.style.display="none";
+}
+});
+
+/* WHATSAPP + LIMPIAR FORMULARIO */
 function enviarWhatsApp(e,form){
 e.preventDefault();
 
@@ -269,8 +280,7 @@ const url = `https://wa.me/51955267888?text=${texto}`;
 
 window.open(url, "_blank");
 
-/* LIMPIAR FORMULARIO */
-form.reset();
+form.reset(); // 👈 LIMPIA LOS CAMPOS
 }
 
 </script>
