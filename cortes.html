@@ -264,7 +264,7 @@ sin improvisar, sin errores y sin perder dinero.
 
 <script>
 
-if(!localStorage.getItem("usuarioActivo")){
+if (!localStorage.getItem("acceso")) {
   window.location.href = "index.html";
 }
 
@@ -349,7 +349,7 @@ menu.style.display="none";
 });
 
 function cerrarSesion(){
-  localStorage.removeItem("usuarioActivo");
+  localStorage.removeItem("acceso");
   window.location.href = "index.html";
 }
 
