@@ -187,6 +187,20 @@ height:100%;
 border-radius:10px;
 }
 
+.lista-videos li{
+position:relative;
+}
+
+.lista-videos li.completado::after{
+content:"✔";
+position:absolute;
+right:10px;
+top:8px;
+color:#22c55e;
+font-size:14px;
+font-weight:bold;
+}
+  
 </style>
 </head>
 
@@ -408,11 +422,19 @@ let menu = document.getElementById("mobileMenu");
 
 /* CARGA API YOUTUBE */
 function onYouTubeIframeAPIReady(){
+
 for(let i=1;i<=7;i++){
-players[i] = new YT.Player('iframe'+i);
+
+players[i] = new YT.Player('iframe'+i,{
+events:{
+'onReady': onPlayerReady,
+'onStateChange': onPlayerStateChange
 }
+});
+
 }
 
+}
 /* REPRODUCIR VIDEO PRINCIPAL */
 function playPrincipal(id,element){
 marcarActivo(element);
@@ -467,6 +489,77 @@ function cerrarSesion(){
   window.location.href = "index.html";
 }
 
+let progresoIntervalos = {};
+
+function obtenerVideoID(url){
+let match = url.match(/embed\/([^?]+)/);
+return match ? match[1] : null;
+}
+
+function onPlayerReady(event){
+
+let iframe = event.target.getIframe();
+let videoID = obtenerVideoID(iframe.src);
+
+let tiempoGuardado = localStorage.getItem("progreso_"+videoID);
+
+if(tiempoGuardado && tiempoGuardado !== "completado"){
+event.target.seekTo(parseFloat(tiempoGuardado), true);
+}
+
+if(tiempoGuardado === "completado"){
+marcarComoCompletado(videoID);
+}
+
+}
+
+function onPlayerStateChange(event){
+
+let iframe = event.target.getIframe();
+let videoID = obtenerVideoID(iframe.src);
+
+if(event.data === YT.PlayerState.PLAYING){
+
+progresoIntervalos[videoID] = setInterval(()=>{
+
+let tiempo = event.target.getCurrentTime();
+let duracion = event.target.getDuration();
+
+if(tiempo >= duracion - 2){
+
+localStorage.setItem("progreso_"+videoID, "completado");
+marcarComoCompletado(videoID);
+clearInterval(progresoIntervalos[videoID]);
+
+}else{
+
+localStorage.setItem("progreso_"+videoID, tiempo);
+
+}
+
+},5000);
+
+}
+
+if(event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED){
+clearInterval(progresoIntervalos[videoID]);
+}
+
+}
+
+function marcarComoCompletado(videoID){
+
+document.querySelectorAll(".lista-videos li").forEach(li=>{
+
+let onclick = li.getAttribute("onclick");
+if(onclick && onclick.includes(videoID)){
+li.classList.add("completado");
+}
+
+});
+
+}  
+  
 </script>
 
 </body>
