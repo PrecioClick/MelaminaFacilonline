@@ -177,10 +177,15 @@ margin-top:40px;
 .video-container{
 position:relative;
 width:100%;
-max-width:900px;
 margin:20px auto;
-padding-bottom:56.25%; /* 16:9 */
+padding-bottom:56.25%;
 height:0;
+}
+
+@media(min-width:1024px){
+.video-container{
+max-width:750px;
+}
 }
 
 .video-container iframe{
@@ -235,7 +240,7 @@ border-radius:10px;
 <section class="section">
 <div class="container">
 
-<h1 class="titulo-seccion"">Curso Completo de Melamina</h1>
+<h1 class="titulo-seccion">Curso Completo de Melamina</h1>
 <p style="text-align:center">De nivel cero a profesional</p>
 
 <!-- MÓDULO 1 -->
