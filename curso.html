@@ -188,20 +188,27 @@ border-radius:10px;
 }
 
 .lista-videos li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: flex;               /* Flex para alinear texto + check */
+    align-items: center;         /* Centrar verticalmente */
     cursor: pointer;
     padding: 8px;
     border-radius: 6px;
-    transition: .3s;
     margin-bottom: 5px;
     line-height: 1.4;
+    word-break: break-word;      /* Permite que títulos largos se dividan sin romper layout */
+}
+
+.lista-videos li .video-info {
+    flex: 1;                     /* Ocupa todo el espacio disponible */
+    display: flex;
+    align-items: center;
 }
 
 .lista-videos li span.check {
-    flex-shrink: 0;
-    margin-left: 10px;
+    flex-shrink: 0;              /* No se reduce */
+    color: green;                /* Check verde */
+    margin-left: 8px;            /* Espacio respecto al título */
+    font-size: 1em;              /* Tamaño igual a la línea */
 }
 
 </style>
@@ -415,7 +422,6 @@ allow="autoplay" allowfullscreen></iframe>
 
 <script>
 
-<script>
 // PROTECCIÓN DE ACCESO
 if (!localStorage.getItem("acceso")) {
     window.location.href = "index.html";
@@ -427,24 +433,22 @@ let menu = document.getElementById("mobileMenu");
 // Guardar progreso de videos
 let progresoVideos = JSON.parse(localStorage.getItem("progresoVideos") || "{}");
 
-// Actualizar check en el span del li
+// Función para actualizar el check al final de cada título
 function actualizarCheck(videoKey, liElement) {
     let checkSpan = liElement.querySelector("span.check");
     if (!checkSpan) {
         checkSpan = document.createElement("span");
         checkSpan.className = "check";
+        checkSpan.style.color = "green";
+        checkSpan.style.marginLeft = "8px";
         liElement.appendChild(checkSpan);
     }
-    if (progresoVideos[videoKey] && progresoVideos[videoKey].completado) {
-        checkSpan.textContent = "✅";
-    } else {
-        checkSpan.textContent = "";
-    }
+    checkSpan.textContent = (progresoVideos[videoKey] && progresoVideos[videoKey].completado) ? "✅" : "";
 }
 
 // CARGA API YOUTUBE
-function onYouTubeIframeAPIReady(){
-    for(let i=1;i<=7;i++){
+function onYouTubeIframeAPIReady() {
+    for(let i=1; i<=7; i++) {
         players[i] = new YT.Player('iframe'+i, {
             events: {
                 'onReady': function(event){
@@ -583,8 +587,6 @@ function cerrarSesion(){
   localStorage.removeItem("acceso");
   window.location.href = "index.html";
 }
-
-</script>
 
 </script>
 
