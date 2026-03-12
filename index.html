@@ -354,40 +354,33 @@
     const intervalo = setInterval(actualizarContador, 1000);
     actualizarContador();
 
-  let cupos = parseInt(localStorage.getItem("cuposLanding"));
+  let cupos = localStorage.getItem("cuposLanding");
 
-if(isNaN(cupos)){
-    cupos = 13;
-}
+   if(!cupos){
+   cupos = 13;
+   localStorage.setItem("cuposLanding", cupos);
+   }
 
-localStorage.setItem("cuposLanding", cupos);
-}
+   document.getElementById("cupos").innerText = cupos;
+   document.getElementById("cuposBarra").innerText = cupos;
 
-function actualizarCupos(){
-document.getElementById("cupos").innerText = cupos;
-document.getElementById("cuposBarra").innerText = cupos;
-}
+   function reducirCupos(){
 
-actualizarCupos();
+   if(cupos > 4){
+   cupos--;
+   localStorage.setItem("cuposLanding", cupos);
+   document.getElementById("cupos").innerText = cupos;
+   document.getElementById("cuposBarra").innerText = cupos;
+   }
 
-function reducirCupos(){
+   }
 
-if(cupos > 4){
-cupos--;
-localStorage.setItem("cuposLanding", cupos);
-actualizarCupos();
-}
-
-}
-
-setInterval(reducirCupos, 45000);
-        
+   setInterval(reducirCupos, 45000);
     function actualizarVisitantes(){
 let numero = Math.floor(Math.random() * 18) + 18;
 document.getElementById("visitantes").innerText = numero;
 }
-        
-actualizarVisitantes();
+
 setInterval(actualizarVisitantes, 8000);
 
  /* Personas q comprar el curso */
@@ -413,8 +406,8 @@ box.style.display="none";
 
 }
 
-setTimeout(mostrarCompra, 5000);
 setInterval(mostrarCompra, 15000);
+
         
 </script>
 
