@@ -354,13 +354,13 @@
     const intervalo = setInterval(actualizarContador, 1000);
     actualizarContador();
 
-   let cupos = localStorage.getItem("cuposLanding");
+  let cupos = parseInt(localStorage.getItem("cuposLanding"));
 
-if(cupos === null){
+if(isNaN(cupos)){
     cupos = 13;
-    localStorage.setItem("cuposLanding", cupos);
-}else{
-    cupos = parseInt(cupos);
+}
+
+localStorage.setItem("cuposLanding", cupos);
 }
 
 function actualizarCupos(){
@@ -386,7 +386,8 @@ setInterval(reducirCupos, 45000);
 let numero = Math.floor(Math.random() * 18) + 18;
 document.getElementById("visitantes").innerText = numero;
 }
-
+        
+actualizarVisitantes();
 setInterval(actualizarVisitantes, 8000);
 
  /* Personas q comprar el curso */
@@ -412,6 +413,7 @@ box.style.display="none";
 
 }
 
+setTimeout(mostrarCompra, 5000);
 setInterval(mostrarCompra, 15000);
         
 </script>
