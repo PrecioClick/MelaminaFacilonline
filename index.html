@@ -217,6 +217,9 @@
         
         <p class="text-gray-400 line-through text-2xl italic">Antes S/ 99.00</p>
         <p class="text-5xl md:text-7xl font-black text-green-500 my-4">S/ 19.90</p>
+        <p class="text-sm text-gray-300 mt-2">
+        👀 <span id="visitantes">27</span> personas están viendo esta oferta ahora mismo
+        </p>
 
         <a href="https://wa.me/51955267888?text=¡Hola!%20Estoy%20muy%20interesado%20en%20acceder%20al%20curso%20Master%20en%20Melamina%20y%20quiero%20obtener%20más%20información%20para%20empezar%20cuanto%20antes."
         onclick="fbq('track','Lead'); fbq('track','Contact'); fbq('track','Purchase',{value:19.90,currency:'PEN'});"
@@ -337,16 +340,57 @@
     const intervalo = setInterval(actualizarContador, 1000);
     actualizarContador();
 
-    let cupos = 13;
+   let cupos = localStorage.getItem("cuposLanding");
 
-    function reducirCupos(){
-    if(cupos > 4){
-    cupos--;
-    document.getElementById("cupos").innerText = cupos;
-    }
-    }
+   if(!cupos){
+   cupos = 13;
+   localStorage.setItem("cuposLanding", cupos);
+   }
 
-setInterval(reducirCupos, 45000);
+   document.getElementById("cupos").innerText = cupos;
+
+   function reducirCupos(){
+
+   if(cupos > 4){
+   cupos--;
+   localStorage.setItem("cuposLanding", cupos);
+   document.getElementById("cupos").innerText = cupos;
+   }
+
+   }
+
+   setInterval(reducirCupos, 45000);
+    function actualizarVisitantes(){
+let numero = Math.floor(Math.random() * 18) + 18;
+document.getElementById("visitantes").innerText = numero;
+}
+
+setInterval(actualizarVisitantes, 8000);
+
+ /* Personas q comprar el curso */
+const nombres = ["Carlos","Luis","Andrés","Miguel","Juan","Pedro","Jorge","Diego","Raúl","Fernando"];
+const ciudades = ["Lima","Arequipa","Cusco","Trujillo","Piura","Chiclayo","Ica","Tacna","Huancayo"];
+
+function mostrarCompra(){
+    
+let nombre = nombres[Math.floor(Math.random()*nombres.length)];
+let ciudad = ciudades[Math.floor(Math.random()*ciudades.length)];
+
+let mensaje = "🔥 " + nombre + " de " + ciudad + " acaba de obtener el curso";
+
+document.getElementById("mensajeCompra").innerText = mensaje;
+
+let box = document.getElementById("notificacionCompra");
+
+box.style.display = "block";
+
+setTimeout(()=>{
+box.style.display="none";
+},4000);
+
+}
+
+setInterval(mostrarCompra, 15000);
         
 </script>
 
@@ -382,6 +426,22 @@ color:white;
 OBTENER DESCUENTO
 </a>
 
+</div>
+
+<div id="notificacionCompra" style="
+position:fixed;
+left:20px;
+bottom:90px;
+background:white;
+padding:12px 16px;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,0.2);
+display:none;
+z-index:9999;
+font-size:14px;
+max-width:260px;
+">
+<span id="mensajeCompra"></span>
 </div>
     
 </body>
