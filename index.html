@@ -356,28 +356,35 @@
 
   let cupos = localStorage.getItem("cuposLanding");
 
-   if(!cupos){
-   cupos = 13;
-   localStorage.setItem("cuposLanding", cupos);
-   }
-
-   document.getElementById("cupos").innerText = cupos;
-const barra = document.getElementById("cuposBarra");
-if(barra) barra.innerText = cupos;
+if(!cupos){
+cupos = 13;
+localStorage.setItem("cuposLanding", cupos);
 }
 
-   function reducirCupos(){
+document.getElementById("cupos").innerText = cupos;
 
-   if(cupos > 4){
-   cupos--;
-   localStorage.setItem("cuposLanding", cupos);
-       
-   document.getElementById("cupos").innerText = cupos;
 const barra = document.getElementById("cuposBarra");
-if(barra) barra.innerText = cupos;
+if(barra){
+barra.innerText = cupos;
 }
 
-   }
+function reducirCupos(){
+
+if(cupos > 4){
+cupos--;
+localStorage.setItem("cuposLanding", cupos);
+
+document.getElementById("cupos").innerText = cupos;
+
+const barra = document.getElementById("cuposBarra");
+if(barra){
+barra.innerText = cupos;
+}
+
+}
+
+}
+
 
    setInterval(reducirCupos, 45000);
     function actualizarVisitantes(){
